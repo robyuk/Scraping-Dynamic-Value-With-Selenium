@@ -1,11 +1,11 @@
 from selenium import webdriver
 import time
 
-rywebpage='http://automated.pythonanywhere.com/'
-ryxpath='/html/body/div[1]/div/h1[2]'
-ryfullxpath='/html/body/div[1]/div/h1[2]/text()'
+rywebpage='https://zse.hr/en/indeks-366/365?isin=HRZB00ICBEX6'
+ryxpath='//*[@id="app_indeks"]/section[1]/div/div/div[2]/span[2]'
+ryfullxpath='/html/body/div[1]/div/section[1]/div/div/div[2]/span[2]'
 
-def getwebpage(rywebpath):
+def getdriver(rywebpath):
   #Set options to make web browsing easier
   options=webdriver.ChromeOptions()
   options.add_argument('disable-infobars')
@@ -19,13 +19,13 @@ def getwebpage(rywebpath):
   return driver
 
 def gettemp(text):
-  """ Extract only the temperature from the text string """
-  temp=float(text.split(": ")[1])
+  """ Extract only the number from the text string """
+  temp=float(text.split(" ")[0])
   return temp
 
 def main(rywebpage,ryxpath):
   """ gets a dynamic value from a web page """
-  driver=getwebpage(rywebpage)
+  driver=getdriver(rywebpage)
   driver.get(rywebpage)
   time.sleep(2)
   element=driver.find_element(by='xpath', value=ryxpath)
