@@ -3,24 +3,20 @@ import yagmail
 import os
 import time
 
-# Does not work because of Amazon bot check!!
-
-rywebpage='https://www.amazon.com/PF-WaterWorks-PF0989-Disposal-Installation/dp/B078H38Q1M/'
-ryxpath='//*[@id="corePrice_desktop"]/div/table/tbody/tr/td[2]/span[1]/span[1]'
-ryfullxpath='/html/body/div[1]/div[2]/div[9]/div[6]/div[4]/div[9]/div[2]/div/table/tbody/tr/td[2]/span[1]/span[1]'
+rywebpage='https://zse.hr/en/indeks-366/365?isin=HRZB00ICBEX6'
+ryxpath='//*[@id="app_indeks"]/section[1]/div/div/div[2]/span[2]'
+ryfullxpath='/html/body/div[1]/div/section[1]/div/div/div[2]/span[2]'
 
 
-def sendEmail(price,oldprice):
+def sendEmail(drop):
   sender=os.getenv('automailsender')
   # you can obtain a disposable receiver email address from 
   # https://dropmail.me/
-  receiver='lrajcuxyb@laste.ml'
-  subject=f'PF0989 Price has changed to ${price}'
-  content=f,"""
-Price has changed!
-PF WaterWorks PF0989 Garbage Disposal Installation Kit, White
-  Current price=${price}
-  Previous price=${oldprice}
+  receiver='cxpvzdnvb@netmail.tk'
+  subject=f'CBX has changed {drop}%'
+  content="""
+CBX has changed!
+
 """
   yag=yagmail.SMTP(user=sender, password=os.getenv('automailpw'))
   yag.send(to=receiver, subject=subject, contents=content+str(drop)+"%")
@@ -53,15 +49,6 @@ def scrape(rywebpage,ryxpath):
   element=driver.find_element(by='xpath', value=ryxpath)
   return gettemp(element.text)
 
-
-oldprice=scrape(rywebpage,ryxpath)
-
-#uncomment next line for testing
-oldprice=0
-
-while True:
-  time.sleep(36)
-  currentprice=scrape(rywebpage,ryxpath)
-  if not currentprice == oldprice:
-    sendEmail(currentprice)
-    oldprice=currentprice
+changePercent=scrape(rywebpage,ryxpath)
+if changePercent < 0.1:
+  sendEmail(changePercent)
